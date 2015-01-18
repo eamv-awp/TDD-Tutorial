@@ -55,7 +55,9 @@ public class StringCalculatorImpl implements StringCalculator {
 		boolean hasMoreCustomDelimiters = false;
 		if (customDelimitedNumbers.startsWith(customDelimiterPrefix)) {
 			String customDelimiter;
-			if (customDelimitedNumbers.contains(customDelimiterStartWrapper) && customDelimitedNumbers.contains(customDelimiterStartWrapper)) {
+			boolean containsWrappedDelimiter = customDelimitedNumbers.contains(customDelimiterStartWrapper) 
+											   && customDelimitedNumbers.contains(customDelimiterStartWrapper);
+			if (containsWrappedDelimiter) {
 				int wrapperStartIndex = customDelimitedNumbers.indexOf(customDelimiterStartWrapper);
 				int wrapperEndIndex = customDelimitedNumbers.indexOf(customDelimiterEndWrapper);
 				customDelimiter = customDelimitedNumbers.substring(wrapperStartIndex + 1, wrapperEndIndex);
@@ -70,7 +72,12 @@ public class StringCalculatorImpl implements StringCalculator {
 			standardDelimitedNumbers = numbersOnly.replaceAll(Pattern.quote(customDelimiter), delimiter);
 			
 			if (hasMoreCustomDelimiters) {
-				String partiallyStandardDelimitedNumbers = customDelimiterPrefix + customDelimitedNumbers.substring(customDelimitedNumbers.indexOf(customDelimiterEndWrapper) + 1, customDelimitedNumbers.indexOf(newline) + 1) + standardDelimitedNumbers;
+				int nextDelimiterIndex = customDelimitedNumbers.indexOf(customDelimiterEndWrapper) + 1;
+				int firstNumberIndex = customDelimitedNumbers.indexOf(newline) + 1;
+				String remainingDelimiters = customDelimitedNumbers.substring(nextDelimiterIndex, firstNumberIndex);
+				
+				String partiallyStandardDelimitedNumbers = customDelimiterPrefix + remainingDelimiters + standardDelimitedNumbers;
+				
 				return standardizeDelimiters(partiallyStandardDelimitedNumbers);
 			}
 		} else
