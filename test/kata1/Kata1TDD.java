@@ -84,4 +84,11 @@ public class Kata1TDD {
 		assertEquals(2, calculator.add("//;\n2;1001"));
 	}
 
+	@Test
+	public void testCustomDelimiterOfArbitraryLength() throws Exception {
+		StringCalculator calculator = new StringCalculatorImpl();
+		
+		assertEquals(6, calculator.add("//[***]\n1***2***3"));
+	}
+
 }

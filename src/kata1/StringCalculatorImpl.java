@@ -1,9 +1,13 @@
 package kata1;
 
+import java.util.regex.Pattern;
+
 public class StringCalculatorImpl implements StringCalculator {
 	public final String delimiter = ",";
 	public final String newline = "\n";
 	public final String customDelimiterPrefix = "//";
+	public final String customDelimiterStartWrapper = "[";
+	public final String customDelimiterEndWrapper = "]";
 	public final String negativeSign = "-";
 
 	@Override
@@ -49,11 +53,19 @@ public class StringCalculatorImpl implements StringCalculator {
 	private String standardizeDelimiters(String customDelimitedNumbers) {
 		String standardDelimitedNumbers;
 		if (customDelimitedNumbers.startsWith(customDelimiterPrefix)) {
-			String customDelimiter = customDelimitedNumbers.substring(2, 3);
+			String customDelimiter;
+			if (customDelimitedNumbers.contains(customDelimiterStartWrapper) && customDelimitedNumbers.contains(customDelimiterStartWrapper)) {
+				int wrapperStartIndex = customDelimitedNumbers.indexOf(customDelimiterStartWrapper);
+				int wrapperEndIndex = customDelimitedNumbers.indexOf(customDelimiterEndWrapper);
+				customDelimiter = customDelimitedNumbers.substring(wrapperStartIndex + 1, wrapperEndIndex);
+			}
+			else
+				customDelimiter = customDelimitedNumbers.substring(2, 3);
+			
 			String numbersOnly = customDelimitedNumbers.substring(customDelimitedNumbers.indexOf(newline) + 1);
-			standardDelimitedNumbers = numbersOnly.replaceAll(customDelimiter, delimiter);
+			standardDelimitedNumbers = numbersOnly.replaceAll(Pattern.quote(customDelimiter), delimiter);
 		} else
-			standardDelimitedNumbers = customDelimitedNumbers.replaceAll(newline, delimiter);
+			standardDelimitedNumbers = customDelimitedNumbers.replaceAll(Pattern.quote(newline), delimiter);
 
 		return standardDelimitedNumbers;
 	}
