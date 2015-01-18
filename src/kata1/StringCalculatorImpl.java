@@ -52,18 +52,27 @@ public class StringCalculatorImpl implements StringCalculator {
 
 	private String standardizeDelimiters(String customDelimitedNumbers) {
 		String standardDelimitedNumbers;
+		boolean hasMoreCustomDelimiters = false;
 		if (customDelimitedNumbers.startsWith(customDelimiterPrefix)) {
 			String customDelimiter;
 			if (customDelimitedNumbers.contains(customDelimiterStartWrapper) && customDelimitedNumbers.contains(customDelimiterStartWrapper)) {
 				int wrapperStartIndex = customDelimitedNumbers.indexOf(customDelimiterStartWrapper);
 				int wrapperEndIndex = customDelimitedNumbers.indexOf(customDelimiterEndWrapper);
 				customDelimiter = customDelimitedNumbers.substring(wrapperStartIndex + 1, wrapperEndIndex);
+				
+				if (customDelimitedNumbers.lastIndexOf(customDelimiterStartWrapper) != wrapperStartIndex)
+					hasMoreCustomDelimiters = true;
 			}
 			else
 				customDelimiter = customDelimitedNumbers.substring(2, 3);
 			
 			String numbersOnly = customDelimitedNumbers.substring(customDelimitedNumbers.indexOf(newline) + 1);
 			standardDelimitedNumbers = numbersOnly.replaceAll(Pattern.quote(customDelimiter), delimiter);
+			
+			if (hasMoreCustomDelimiters) {
+				String partiallyStandardDelimitedNumbers = customDelimiterPrefix + customDelimitedNumbers.substring(customDelimitedNumbers.indexOf(customDelimiterEndWrapper) + 1, customDelimitedNumbers.indexOf(newline) + 1) + standardDelimitedNumbers;
+				return standardizeDelimiters(partiallyStandardDelimitedNumbers);
+			}
 		} else
 			standardDelimitedNumbers = customDelimitedNumbers.replaceAll(Pattern.quote(newline), delimiter);
 

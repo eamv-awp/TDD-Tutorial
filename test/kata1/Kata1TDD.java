@@ -91,4 +91,18 @@ public class Kata1TDD {
 		assertEquals(6, calculator.add("//[***]\n1***2***3"));
 	}
 
+	@Test
+	public void testMultipleCustomDelimiters() throws Exception {
+		StringCalculator calculator = new StringCalculatorImpl();
+		
+		assertEquals(6, calculator.add("//[*][%]\n1*2%3"));
+	}
+
+	@Test
+	public void testMultipleCustomDelimitersOfArbitraryLength() throws Exception {
+		StringCalculator calculator = new StringCalculatorImpl();
+		
+		assertEquals(6, calculator.add("//[***][%]\n1%2***3"));
+	}
+
 }
