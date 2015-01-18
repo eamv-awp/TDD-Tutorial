@@ -23,13 +23,20 @@ public class StringCalculatorImpl implements StringCalculator {
 		if (numbers.contains(delimiter)) // Recursively sum standard-delimited numbers
 			return firstNumber(numbers) + add(remainingNumbers(numbers));
 		else
-			return Integer.parseInt(numbers);
+			return firstNumber(numbers);
 	}
 
 	private int firstNumber(String numbers) {
 		int delimiterIndex = numbers.indexOf(delimiter);
+		if (delimiterIndex < 0)
+			delimiterIndex = numbers.length();
+		
+		int number = Integer.parseInt(numbers.substring(0, delimiterIndex));
+		
+		if (number > 1000)
+			number = 0;
 
-		return Integer.parseInt(numbers.substring(0, delimiterIndex));
+		return number;
 	}
 
 	private String remainingNumbers(String numbers) {

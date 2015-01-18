@@ -76,5 +76,12 @@ public class Kata1TDD {
 			assertTrue(e.getMessage().contains("-57"));
 		}
 	}
+	
+	@Test
+	public void testNumbersLargerThan1000BeingIgnored() throws Exception {
+		StringCalculator calculator = new StringCalculatorImpl();
+		
+		assertEquals(2, calculator.add("//;\n2;1001"));
+	}
 
 }
